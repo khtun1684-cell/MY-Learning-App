@@ -1,1 +1,389 @@
 
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+    background-attachment: fixed;
+    color: #e2e8f0;
+    margin: 0;
+    padding: 40px 20px;
+    text-align: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* ကြယ်တွေ */
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background-repeat: repeat;
+}
+
+/* ကြယ်အသေးလေးတွေ - တဖိတ်ဖိတ် လင်းမယ် */
+body::before {
+    background-image:
+        radial-gradient(1px 1px at 20px 30px, #ffffff, transparent),
+        radial-gradient(1px 1px at 90px 120px, #ffffff, transparent),
+        radial-gradient(2px 2px at 160px 60px, #e0e7ff, transparent),
+        radial-gradient(1px 1px at 230px 180px, #ffffff, transparent),
+        radial-gradient(2px 2px at 300px 90px, #bfdbfe, transparent),
+        radial-gradient(1px 1px at 60px 220px, #ffffff, transparent);
+    background-size: 340px 260px;
+    animation: twinkle 4s ease-in-out infinite;
+}
+
+/* ကြယ်အကြီးလေးတွေ - နှေးနှေး လှုပ်ရှားမယ် */
+body::after {
+    background-image:
+        radial-gradient(2px 2px at 50px 80px, #ffffff, transparent),
+        radial-gradient(3px 3px at 200px 150px, #fef9c3, transparent),
+        radial-gradient(2px 2px at 330px 40px, #ffffff, transparent),
+        radial-gradient(3px 3px at 120px 250px, #e0e7ff, transparent);
+    background-size: 420px 320px;
+    animation: twinkle 6s ease-in-out infinite reverse, drift 80s linear infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes drift {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 420px 320px;
+    }
+}
+
+h1 {
+    color: #93c5fd;
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #e2e8f0;
+    margin-top: 30px;
+}
+
+h3 {
+    color: #1e293b;
+    font-size: 22px;
+    margin: 0 0 12px 0;
+}
+
+p {
+    color: #94a3b8;
+    font-size: 18px;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+    margin: 5px;
+    max-width: 100%;
+}
+
+button {
+    background-color: #2563eb;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+.edit-btn {
+    background-color: #2563eb;
+}
+
+.delete-btn {
+    background-color: #dc2626;
+}
+
+.delete-btn:hover {
+    background-color: #b91c1c;
+}
+
+.course-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+.course-card {
+    background-color: white;
+    width: 280px;
+    padding: 20px;
+    margin: 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.course-card input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 5px 0;
+}
+
+/* Card ထဲက "No courses added yet." စာ မမြင်ရတာ မဖြစ်အောင် */
+.course-container p {
+    color: #94a3b8;
+}
+.vortex {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 700px;
+    height: 700px;
+    margin: -350px 0 0 -350px;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+        from 0deg,
+        rgba(220, 38, 38, 0.45) 0deg 12deg,
+        transparent 12deg 24deg
+    );
+    -webkit-mask-image: radial-gradient(circle, transparent 8%, black 35%, transparent 70%);
+    mask-image: radial-gradient(circle, transparent 8%, black 35%, transparent 70%);
+    animation: vortexSpin 25s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes vortexSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.course-card textarea {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 90px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin: 5px 0;
+    resize: vertical;
+}
+
+.course-card.completed {
+    background-color: #f0fdf4;
+    border: 2px solid #22c55e;
+}
+
+.badge {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #16a34a;
+}
+
+.complete-btn {
+    background-color: #16a34a;
+}
+
+.complete-btn:hover {
+    background-color: #15803d;
+}
+.filter-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.filter-bar a {
+    padding: 10px 18px;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: background-color 0.2s;
+}
+
+.filter-bar a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-bar a.active {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    color: white;
+}
+.progress-wrapper {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+}
+
+.progress-track {
+    width: 100%;
+    height: 14px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+}
+.course-card .save-btn {
+    width: 100%;
+    margin: 5px 0;
+}
+
+.course-card .rename-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.course-card .rename-form input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    padding: 10px;
+}
+
+.course-card .rename-form button {
+    margin: 0;
+    padding: 10px 14px;
+    flex-shrink: 0;
+}
+
+.action-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.action-row form {
+    flex: 1;
+}
+
+.action-row button {
+    width: 100%;
+    margin: 0;
+}
+.notes-section {
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+.notes-section h4 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: #475569;
+}
+
+.note-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px 0;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.note-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    background-color: #f1f5f9;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.note-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.note-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.note-date {
+    color: #94a3b8;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.note-item form {
+    margin: 0;
+}
+
+.note-delete {
+    background: none;
+    color: #94a3b8;
+    padding: 0 6px;
+    margin: 0;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.note-delete:hover {
+    background: none;
+    color: #dc2626;
+}
+
+.note-empty {
+    color: #94a3b8;
+    font-size: 13px;
+    padding: 4px 2px;
+}
