@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Learning App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="vortex"></div>
+
+    <h1>My Learning App</h1>
+
+    <h2>Welcome!</h2>
+    <p>Learn Python, English, and IT skills.</p>
+
+    <form action="/add_course" method="POST">
+        <input type="text" name="course_name" placeholder="Enter course name" required>
+        <button type="submit">Add Course</button>
+    </form>
+
+    <h2>My Courses</h2>
+
+    {% if total > 0 %}
+        {% set percent = (done * 100 / total) | round | int %}
+        <div class="progress-wrapper">
+            <div class="progress-info">
+                <span>Progress</span>
+                <span>{{ done }} / {{ total }} completed ({{ percent }}%)</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: {{ percent }}%;"></div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="filter-bar">
+        <a href="/?filter=all" class="{% if current_filter == 'all' %}active{% endif %}">
+            All ({{ total }})
+        </a>
+        <a href="/?filter=active" class="{% if current_filter == 'active' %}active{% endif %}">
+            In Progress ({{ total - done }})
+        </a>
+        <a href="/?filter=completed" class="{% if current_filter == 'completed' %}active{% endif %}">
+            Completed ({{ done }})
+        </a>
+    </div>
+
+    <div class="course-container">
+        {% for course in courses %}
+            <div class="course-card {% if course.completed %}completed{% endif %}">
+                <h3>
+                    {{ course.name }}
+                    {% if course.completed %}<span class="badge">✔ Completed</span>{% endif %}
+                </h3>
+
+                <div class="notes-section">
+                    <h4>Notes ({{ course.notes|length }})</h4>
+
+                    <ul class="note-list">
+                        {% for note in course.notes %}
+                            <li class="note-item">
+                                <div class="note-body">
+                                    <span class="note-text">{{ note.content }}</span>
+                                    <small class="note-date">{{ note.created_at[:10] }}</small>
+                                </div>
+                                <form action="/delete_note/{{ note.id }}" method="POST">
+                                    <input type="hidden" name="filter" value="{{ current_filter }}">
+                                    <button type="submit" class="note-delete" title="Delete note">×</button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li class="note-empty">No notes yet.</li>
+                        {% endfor %}
+                    </ul>
+
+                    <form action="/add_note/{{ course.id }}" method="POST">
+                        <input type="hidden" name="filter" value="{{ current_filter }}">
+                        <textarea name="content" placeholder="Add a new note..." required></textarea>
+                        <button type="submit" class="save-btn">Add Note</button>
+                    </form>
+                </div>
+
+                <form action="/edit_course/{{ course.id }}" method="POST" class="rename-form">
+                    <input type="hidden" name="filter" value="{{ current_filter }}">
+                    <input type="text" name="new_name" placeholder="New course name" required>
+                    <button type="submit" class="edit-btn">Rename</button>
+                </form>
+
+                <div class="action-row">
+                    <form action="/toggle_complete/{{ course.id }}" method="POST">
+                        <input type="hidden" name="filter" value="{{ current_filter }}">
+                        <button type="submit" class="complete-btn">
+                            {% if course.completed %}Undo{% else %}Complete{% endif %}
+                        </button>
+                    </form>
+
+                    <form action="/delete_course/{{ course.id }}" method="POST"
+                          onsubmit="return confirm('ဒီ course ကို ဖျက်မှာ သေချာလား?');">
+                        <input type="hidden" name="filter" value="{{ current_filter }}">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            {% if current_filter == 'completed' %}
+                <p>No completed courses yet.</p>
+            {% elif current_filter == 'active' %}
+                <p>No courses in progress.</p>
+            {% else %}
+                <p>No courses added yet.</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+</body>
+</html>
